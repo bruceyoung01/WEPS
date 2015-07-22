@@ -1,0 +1,93 @@
+#  $ID: Makefile V01 06/28/2012 11:09 BRUCE EXP$
+#
+#******************************************************************************
+#  Makefile IS USED TO COMPILE WEPS.
+#
+#  NOTES:
+#  ============================================================================
+#  (1 ) ORIGINALLY WRITTEN BY BRUCE. (06/28/2012)
+#******************************************************************************
+
+#  READ ENVIRONMENT VARIABLE
+#include ./configure.wps
+
+#  NAME OF COMPILER
+FFLAGS      = -c -g -free -I${NETCDF}/include -L${NETCDF}/lib -lnetcdf -lnetcdff -ftz -convert big_endian
+FC          = ifort $(FFLAGS)
+LINK.f      = ifort -convert big_endian -I${NETCDF}/include -L${NETCDF}/lib -lnetcdf -lnetcdff
+
+#  USED LIBRARIES
+LIBS        =
+
+#  NAME OF EXECUTABLE FILE
+APPLICATION =  'WEPS.EXE'
+
+#  OBJECT MODULES
+OBJ_MAIN    = WEPS.o
+OBJ_MODULES = PARALLEL_MODULE.o         \
+              TOOL_KIT_MOD.o            \
+              PARAMETER_MOD.o           \
+              CONSTANTS_MOD.o           \
+              GEOMETRY_MOD.o            \
+              MODULE_DEBUG.o            \
+              ERROR_MOD.o               \
+              CHARPAK_MOD.o             \
+              MISC_DEFINITIONS_MODULE.o \
+              MODULE_MAP_UTILS.o        \
+              NAMELIST_ARRAY_MOD.o      \
+              NAMELIST_MOD.o            \
+              NEI_MOD.o                 \
+              INTEX_MOD.o               \
+              FLAMBE_MOD.o              \
+              FINN_MOD.o                \
+              GBBEP_MOD.o               \
+              GFED_MOD.o                \
+              SEVIRI_MOD.o              \
+              GFAS_MOD.o                \
+              QFED_MOD.o                \
+              WRITE_MOD.o
+#             CLEANUP.o
+              
+#  EXECUTABLES
+#all: $(APPLICATION)
+
+$(APPLICATION):   $(OBJ_MODULES)  \
+                  $(OBJ_MAIN)
+	$(LINK.f) $(OBJ_MODULES)  \
+	          $(OBJ_MAIN)     \
+                  $(LIBS) -o $(APPLICATION)
+
+#  COMPILATIONS
+WEPS.o				: WEPS.F
+PARALLEL_MODULE.o		: PARALLEL_MODULE.F90
+TOOL_KIT_MOD.o			: TOOL_KIT_MOD.F
+PARAMETER_MOD.o			: PARAMETER_MOD.F
+CONSTANTS_MOD.o			: CONSTANTS_MOD.F
+GEOMETRY_MOD.o			: GEOMETRY_MOD.F
+MODULE_DEBUG.o			: MODULE_DEBUG.F90
+ERROR_MOD.o			: ERROR_MOD.F
+CHARPAK_MOD.o			: CHARPAK_MOD.F
+MISC_DEFINITIONS_MODULE.o	: MISC_DEFINITIONS_MODULE.F90
+MODULE_MAP_UTILS.o		: MODULE_MAP_UTILS.F90
+NAMELIST_ARRAY_MOD.o		: NAMELIST_ARRAY_MOD.F
+NAMELIST_MOD.o			: NAMELIST_MOD.F
+NEI_MOD.o			: NEI_MOD.F
+INTEX_MOD.o			: INTEX_MOD.F
+FLAMBE_MOD.o			: FLAMBE_MOD.F
+FINN_MOD.o			: FINN_MOD.F
+GBBEP_MOD.o			: GBBEP_MOD.F
+GFED_MOD.o			: GFED_MOD.F
+SEVIRI_MOD.o			: SEVIRI_MOD.F
+GFAS_MOD.o			: GFAS_MOD.F
+QFED_MOD.o			: QFED_MOD.F
+WRITE_MOD.o			: WRITE_MOD.F
+
+clean:
+	rm -f ./*.o *.mod *.EXE
+
+
+.SUFFIXES: .f .F .f90 .F90
+.f.o:			; $(FC) -c $*.f
+.F.o:			; $(FC) -c $*.F
+.f90.o:			; $(FC) -c $*.f90
+.F90.o:			; $(FC) -c $*.F90

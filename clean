@@ -1,0 +1,5 @@
+#!/bin/csh -f
+
+set nonomatch
+
+( cd ./ ; /bin/rm -f *.o *.mod )
